@@ -51,9 +51,12 @@ public class RestAssuredExercises5Test {
 	public void checkFourthSpeedRecordWasSetbyAnAstonMartin() {
 		
 		given().
-			spec(requestSpec).
+				spec(requestSpec).
 		when().
-		then();
+				get("/xml/speedrecords").
+		then().
+				assertThat().
+				body("speedRecords.car[3].@make",is("Aston Martin"));
 	}
 	
 	/*******************************************************
