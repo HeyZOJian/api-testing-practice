@@ -11,8 +11,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 
@@ -25,12 +27,12 @@ public class RestAssuredExercises2Test {
 	public static void createRequestSpecification() {
 
 		requestSpec = new RequestSpecBuilder().
-			setBaseUri("http://localhost").
-			setPort(9876).
-			setBasePath("/api/f1").
-			build();
+				setBaseUri("http://localhost").
+				setPort(9876).
+				setBasePath("/api/f1").
+				build();
 	}
-	
+
 	/*******************************************************
 	 * Use junit-jupiter-params for @ParameterizedTest that
 	 * specifies in which country
@@ -56,7 +58,7 @@ public class RestAssuredExercises2Test {
 				get("/circuits/{locality}.json").
 				then().
 				log().
-				all().body("MRData.CircuitTable.Circuits[0].Location.country", is(countryName));
+				all().body("MRData.CircuitTable.Circuits.Location.country", hasItems(countryName));
 	}
 
 	/*******************************************************
@@ -73,29 +75,31 @@ public class RestAssuredExercises2Test {
 	 * is /circuits/monza.json)
 	 * and check the country this circuit can be found in
 	 ******************************************************/
-	
+
 	@Test
 	public void checkCountryForCircuit() {
-		
+
 		given().
-			spec(requestSpec).
-		when().
-		then();
+				spec(requestSpec).
+				when().
+				get("/circuits/monza.json").
+				then().
+				body("MRData.CircuitTable.Circuits.Location.country", not(isEmptyOrNullString()));
 	}
-	
+
 	/*******************************************************
 	 * Request the pitstop data for the first four races in
 	 * 2015 for Max Verstappen (for race 1 this is
 	 * /2015/1/drivers/max_verstappen/pitstops.json)
 	 * and verify the number of pit stops made
 	 ******************************************************/
-	
+
 	@Test
 	public void checkNumberOfPitstopsForMaxVerstappenIn2015() {
-		
+
 		given().
-			spec(requestSpec).
-		when().
-		then();
+				spec(requestSpec).
+				when().
+				then();
 	}
 }
