@@ -64,7 +64,15 @@ public class RestAssuredExercises3Test {
 
 
     static void getNinthDriverId() {
-
+	    ninthDriverId =
+			    given().
+					    spec(requestSpec).
+					    when().
+					    get("2016/drivers.json").
+					    then().
+					    contentType(ContentType.JSON).
+					    extract().
+					    path("MRData.DriverTable.Drivers[8].driverId");
 
     }
 
@@ -101,8 +109,10 @@ public class RestAssuredExercises3Test {
 
         given().
                 spec(requestSpec).
+		        pathParam("ninthDriverId", ninthDriverId).
 		        when().
-		        get("/2016/drivers.json").
-		        then();
+		        get("/drivers/{ninthDriverId}.json").
+		        then().
+		        body("MRData.DriverTable.Drivers[0].nationality", is("German"));
     }
 }
