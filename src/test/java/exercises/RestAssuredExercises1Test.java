@@ -5,9 +5,9 @@ import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import io.restassured.module.jsv.JsonSchemaValidator;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 
@@ -128,7 +128,11 @@ public class RestAssuredExercises1Test {
 		given().
 				spec(requestSpec).
 				when().
-
-				then();
+				get("/2014/circuits.json").
+				then().
+				log().
+				all().
+				assertThat().
+				body("MRData.CircuitTable.Circuits.circuitId", not(hasItems("nurburgring")));
 	}
 }
