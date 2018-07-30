@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.xml.HasXPath.hasXPath;
 
@@ -91,9 +93,12 @@ public class RestAssuredExercises5Test {
 		given().
 			spec(requestSpec).
 		when().
-		then();
+				get("/xml/speedrecords").
+		then().
+				assertThat().
+				body("speedRecords.car[4].@country",anyOf(equalTo("Italy"),equalTo("Germany")));
 	}
-	
+
 	/*******************************************************
 	 * Get the list of speed records set by street legal cars
 	 * use /xml/speedrecords
