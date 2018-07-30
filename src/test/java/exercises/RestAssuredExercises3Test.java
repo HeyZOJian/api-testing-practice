@@ -1,12 +1,17 @@
 package exercises;
 
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.http.ContentType;
+import io.restassured.internal.ResponseSpecificationImpl;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.core.Is.is;
 
 public class RestAssuredExercises3Test {
 
@@ -40,10 +45,12 @@ public class RestAssuredExercises3Test {
 
     private static ResponseSpecification responseSpec;
 
-
     static void createResponseSpecification() {
-
-
+	    responseSpec = new ResponseSpecBuilder().
+			    expectStatusCode(200).
+			    expectContentType(ContentType.JSON).
+			    expectBody("MRData.CircuitTable.Circuits.circuitName[0]", equalTo("Albert Park Grand Prix Circuit")).
+			    build();
     }
 
     /*******************************************************
@@ -72,10 +79,14 @@ public class RestAssuredExercises3Test {
     @Test
     public void useResponseSpecification() {
 
-        given().
-                spec(requestSpec).
-                when().
-                then();
+	    given().
+			    spec(requestSpec).
+			    when().
+			    get("/2014/circuits.json").
+			    then().
+			    spec(responseSpec).
+			    and().
+			    body("MRData.CircuitTable.Circuits.Location[0].locality", equalTo("Melbourne"));
     }
 
     /*******************************************************
@@ -90,7 +101,8 @@ public class RestAssuredExercises3Test {
 
         given().
                 spec(requestSpec).
-                when().
-                then();
+		        when().
+		        get("/2016/drivers.json").
+		        then();
     }
 }

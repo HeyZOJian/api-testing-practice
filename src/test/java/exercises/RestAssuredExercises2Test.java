@@ -58,7 +58,8 @@ public class RestAssuredExercises2Test {
 				get("/circuits/{locality}.json").
 				then().
 				log().
-				all().body("MRData.CircuitTable.Circuits.Location.country", hasItems(countryName));
+				all().
+				body("MRData.CircuitTable.Circuits.Location.country", hasItems(countryName));
 	}
 
 	/*******************************************************
@@ -88,7 +89,8 @@ public class RestAssuredExercises2Test {
 				get("/2015/{raceName}/drivers/max_verstappen/pitstops.json").
 				then().
 				log().
-				all().body("MRData.total", is(pitStopNumber));
+				all().
+				body("MRData.total", is(pitStopNumber));
 	}
 
 	/*******************************************************
