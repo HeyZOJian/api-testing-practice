@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.xml.HasXPath.hasXPath;
 
 public class RestAssuredExercises5Test {
 
@@ -33,7 +35,9 @@ public class RestAssuredExercises5Test {
 		given().
 			spec(requestSpec).
 		when().
-		then();
+				get("/xml/speedrecords").
+		then().log().all().
+		assertThat().body( "speedRecords.car[2].year",is("1955"));
 	}
 	
 	/*******************************************************
