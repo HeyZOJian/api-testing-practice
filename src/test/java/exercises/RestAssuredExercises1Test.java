@@ -33,7 +33,10 @@ public class RestAssuredExercises1Test {
         given().
                 spec(requestSpec).
                 when().
-                then();
+		        get("/2016/drivers.json").
+                then().
+		        assertThat().
+		        statusCode(200);
     }
 
     /*******************************************************
